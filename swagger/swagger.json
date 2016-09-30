@@ -1,0 +1,226 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API Movies",
+        "contact": {
+            "name": "Eliecer Narvaez",
+            "url": "http://ernarvaezm.xyz"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logs user into the system",
+                "description": "",
+                "operationId": "login",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "The email for login",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "The password for login in clear text",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token Generated"
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Store a newly created resource in storage.",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "register",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of new user",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "The password for new user in clear text",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "The email of new user",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User saved."
+                    },
+                    "401": {
+                        "description": "Unauthorized action."
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Display the specified resource.",
+                "description": "close session.",
+                "operationId": "logout",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    }
+                }
+            }
+        },
+        "/api/movies/": {
+            "get": {
+                "tags": [
+                    "Movie"
+                ],
+                "summary": "Display a listing of all movies.",
+                "description": "Get all movies",
+                "operationId": "index",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthorized action."
+                    }
+                }
+            }
+        },
+        "/api/movies/{movie_id}": {
+            "get": {
+                "tags": [
+                    "Movie"
+                ],
+                "summary": "Display the specified resource.",
+                "description": "Display the specified movie.",
+                "operationId": "show",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "movie_id",
+                        "in": "path",
+                        "description": "id movie that you want see",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized action."
+                    },
+                    "404": {
+                        "description": "Movie not found."
+                    },
+                    "200": {
+                        "description": "Operation successful."
+                    }
+                }
+            }
+        },
+        "/api/movies/search/{text}": {
+            "get": {
+                "tags": [
+                    "Movie"
+                ],
+                "summary": "Display the specified resource.",
+                "description": "Display the specified movie.",
+                "operationId": "search",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "path",
+                        "description": "any value that you want search ",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized action."
+                    },
+                    "200": {
+                        "description": "Operation successful."
+                    },
+                    "404": {
+                        "description": "Movie not found."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Error": {
+            "required": [
+                "code",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "description": "Class Controller",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "Class Controller",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

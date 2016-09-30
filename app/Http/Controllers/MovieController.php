@@ -10,11 +10,33 @@ use App\Http\Requests;
 
 class MovieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * @SWG\Get(
+   *     path="/api/movies/",
+   *     summary="Display a listing of all movies.",
+   *     tags={"Movie"},
+   *     description="Get all movies",
+   *     operationId="index",
+   *     consumes={ "application/json"},
+   *     produces={"application/json"},
+   *     @SWG\Response(
+   *         response=200,
+   *         description="successful operation"
+   *     ),
+   *     @SWG\Response(
+   *         response="401",
+   *         description="Unauthorized action.",
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="Operation successful."
+   *    )
+   * )
+   *
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
 
     public function index()
     {
@@ -25,14 +47,39 @@ class MovieController extends Controller
 
     /**
      * Display the specified resource.
-     *
+         * @SWG\Get(
+          *     path="/api/movies/{movie_id}",
+          *     description="Display the specified movie.",
+          *     operationId="show",
+          *     produces={"application/json"},
+          *     tags={"Movie"},
+          *   @SWG\Parameter(
+          *     name="movie_id",
+          *     in="path",
+          *     description="id movie that you want see",
+          *     required=true,
+          *     type="integer"
+          *   ),
+          *     @SWG\Response(
+          *         response=401,
+          *         description="Unauthorized action."
+          *    ),
+          *     @SWG\Response(
+          *         response=404,
+          *         description="Movie not found.",
+          *    ),
+          *     @SWG\Response(
+          *         response=200,
+          *         description="Operation successful."
+          *    )
+          * )
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($movie_id)
     {
       $this->getAuthenticatedUser();
-      $movie =Movie::find($id);
+      $movie =Movie::find($movie_id);
       if(empty($movie))
       {
       return response()->json('Not found',404);
@@ -41,12 +88,38 @@ class MovieController extends Controller
     }
     /**
      * Display the specified resource.
-     *
-     * @param  string  $any
+         * @SWG\Get(
+          *     path="/api/movies/search/{text}",
+          *     description="Display the specified movie.",
+          *     operationId="search",
+          *     produces={"application/json"},
+          *     tags={"Movie"},
+          *   @SWG\Parameter(
+          *     name="text",
+          *     in="path",
+          *     description="any value that you want search ",
+          *     required=true,
+          *     type="string"
+          *   ),
+          *     @SWG\Response(
+          *         response=401,
+          *         description="Unauthorized action."
+          *    ),
+          *     @SWG\Response(
+          *         response=200,
+          *         description="Operation successful."
+          *    ),
+          *     @SWG\Response(
+          *         response=404,
+          *         description="Movie not found.",
+          *    )
+          * )
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function search($key)
     {
+        $this->getAuthenticatedUser();
       $movie= Movie::where('title', '=', $key)->orWhere('year', '=', $key)
        ->orWhere('director', '=', $key)
        ->orWhere('description', 'LIKE', '%'.$key.'%')->first();
@@ -56,27 +129,8 @@ class MovieController extends Controller
        }
        return response()->json($movie);
     }
-    public function getAuthenticatedUser()
-    {
-      try {
+  
 
-          if (! $user = JWTAuth::parseToken()->authenticate()) {
-              return response()->json(['user_not_found'], 404);
-          }
 
-      } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-          return response()->json(['token_expired'], $e->getStatusCode());
-
-      } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-          return response()->json(['token_invalid'], $e->getStatusCode());
-
-      } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-          return response()->json(['token_absent'], $e->getStatusCode());
-
-        }
-      }
 
 }

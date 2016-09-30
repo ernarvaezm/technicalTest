@@ -18,8 +18,9 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 
-Route::post('/login','AuthController@login');
-Route::post('/register','AuthController@register');
+Route::post('auth/login','AuthController@login');
+Route::post('auth/register','AuthController@register');
+Route::get('auth/logout','AuthController@logout');
 Route::get('movies/','MovieController@index');
 Route::get('movies/{id}','MovieController@show');
 Route::get('movies/search/{key}','MovieController@search');

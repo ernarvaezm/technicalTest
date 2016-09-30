@@ -1,28 +1,33 @@
-# Laravel PHP Framework
+# Api movies
+Este es el respositorio de un api, Creado con el framework `Laravel` para el lenguaje de programación `Php`.
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## ¿Cómo implementar el proyecto en su entorno?
+* Primero es necesario contar con un gestor de bases de datos como `Mysql`,`Postgresql`,`SQL server` entre otros.
+* Tener instalado `composer`.
+* Descargar el proyecto.
+*  Luego se procede a agregar las credenciales al archivo de configuración `.env`. En el repositorio de este proyecto se incluye un archivo de ejemplo llamado `.env.example`, ese archivo debe ser renombrado a `.env` y paso seguido, agregar las credenciales de su base de datos.
+*  Correr las `migraciones` y los `seeds` , con los comandos
+	````
+		$php artisan migrate
+		$php artisan db:seed
+	````
+*  Para ver los Endpoints funcionando se pueden realizar de dos formas `swagger` y`Postman`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+#### Swagger
+*Dentro de la carpeta anteriormente descargada, una carpeta que se llama `swagger` se debe mover algun servidor local como `Apache` para que puede ser ejecutado.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+#### Postman
+*Solo se deben ejecutar las url de los endpoints.
 
-## Official Documentation
+## Funcionalidad
+### Endpoints
+* /api/auth/login => autentica el usuario utilizando JWT
+* /api/auth/register => crea un usuario nuevo en el sistema
+* /api/auth/logout => invalida el token del usuario
+* /api/movies => retorna una lista de películas en la base de datos
+* /api/movies/{id} => retorna el id de la película especificada o 404 si el id de la película no existe.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Para poder acceder al endpoint de películas y cerrar sessión es necesario enviar un token previamente obtenido mediante el `login`, si se usa `postman` solo se agrega en el header
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
-# technicalTest
+		Authorization: Bearer {yourtokenhere}
