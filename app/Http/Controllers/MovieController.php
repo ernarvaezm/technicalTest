@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Movie;
 use Response;
@@ -16,31 +15,12 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
+      $this->getAuthenticatedUser();
       $movies=Movie::all();
       return response()->json($movies);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -51,41 +31,52 @@ class MovieController extends Controller
      */
     public function show($id)
     {
+      $this->getAuthenticatedUser();
       $movie =Movie::find($id);
+      if(empty($movie))
+      {
+      return response()->json('Not found',404);
+      }
       return response()->json($movie);
     }
-
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $any
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function search($key)
     {
-        //
+      $movie= Movie::where('title', '=', $key)->orWhere('year', '=', $key)
+       ->orWhere('director', '=', $key)
+       ->orWhere('description', 'LIKE', '%'.$key.'%')->first();
+       if(empty($movie))
+       {
+       return response()->json('Not found',404);
+       }
+       return response()->json($movie);
     }
+    public function getAuthenticatedUser()
+    {
+      try {
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+          if (! $user = JWTAuth::parseToken()->authenticate()) {
+              return response()->json(['user_not_found'], 404);
+          }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+      } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+          return response()->json(['token_expired'], $e->getStatusCode());
+
+      } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+          return response()->json(['token_invalid'], $e->getStatusCode());
+
+      } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+          return response()->json(['token_absent'], $e->getStatusCode());
+
+        }
+      }
+
 }

@@ -20,4 +20,6 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login','AuthController@login');
 Route::post('/register','AuthController@register');
-Route::resource('movies','MovieController');
+Route::get('movies/','MovieController@index');
+Route::get('movies/{id}','MovieController@show');
+Route::get('movies/search/{key}','MovieController@search');
